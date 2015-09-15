@@ -1,0 +1,48 @@
+import java.util.ArrayList;
+
+public class PascalList {
+    public static void genPyrN(int start, int end) {
+        if (start < 0 || end < 0 || end < start) return;
+        ArrayList<Long> last = new ArrayList<Long>();
+        last.add(1L);
+        if (start == 0) System.out.println(last);
+        for (int i = 1; i <= end; ++i) {
+         ArrayList<Long> thisRow = new ArrayList<Long>(); 
+         thisRow.add(last.get(0));
+         for(int j = 1; j < i; ++j) {
+             thisRow.add(last.get(j-1) + last.get(j));
+         }
+         thisRow.add(last.get(0));
+         last = thisRow;
+         if (i >= start) System.out.println(thisRow);
+        }
+    }
+    
+    static class TooManyArgumentsException extends Exception {
+     
+        public TooManyArgumentsException(String message) {
+            super(message);
+        }
+    }
+    
+    public static void main(String[] args) {
+        int start = -1;
+        int end = -1;
+        try {
+            start = Integer.parseInt(args[0]);
+            if (args.length == 2) end = Integer.parseInt(args[1]);
+            if (args.length > 2) throw new TooManyArgumentsException("More than two numbers were entered.");
+        } catch (NumberFormatException e) {
+            System.out.println("Number Invalid.");
+            return;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            start = 0; 
+            end = 5;
+        } catch (TooManyArgumentsException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        if (end == -1) end = start;
+        genPyrN(start, end);
+    }
+}
